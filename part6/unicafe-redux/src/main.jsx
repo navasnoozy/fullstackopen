@@ -1,17 +1,17 @@
 import ReactDOM from "react-dom/client";
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { useSelector, useDispatch } from 'react-redux';
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import { useSelector, useDispatch } from "react-redux";
 import counterReducer, { good, ok, bad, reset } from "./reducers/counterReducer";
 
 const store = configureStore({
   reducer: counterReducer,
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 const App = () => {
   const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
 
   return (
     <div>
