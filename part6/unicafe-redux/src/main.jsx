@@ -1,28 +1,34 @@
 import ReactDOM from "react-dom/client";
-import { createStore } from "redux";
-import counterReducer from "./reducers/counterReducer";
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { useSelector, useDispatch } from 'react-redux';
+import counterReducer, { good, ok, bad, reset } from "./reducers/counterReducer";
 
-const store = createStore(counterReducer);
+const store = configureStore({
+  reducer: counterReducer,
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
 const App = () => {
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
+
   return (
     <div>
-      <button onClick={() => store.dispatch({ type: "GOOD" })}>good</button>
-      <button onClick={() => store.dispatch({ type: "OK" })}>ok</button>
-      <button onClick={() => store.dispatch({ type: "BAD" })}>bad</button>
-      <button onClick={() => store.dispatch({ type: "RESET" })}>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok {store.getState().ok}</div>
-      <div>bad {store.getState().bad}</div>
+      <button onClick={() => dispatch(good())}>good</button>
+      <button onClick={() => dispatch(ok())}>ok</button>
+      <button onClick={() => dispatch(bad())}>bad</button>
+      <button onClick={() => dispatch(reset())}>reset stats</button>
+      <div>good {state.good}</div>
+      <div>ok {state.ok}</div>
+      <div>bad {state.bad}</div>
     </div>
   );
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
-const renderApp = () => {
-  root.render(<App />);
-};
-
-renderApp();
-store.subscribe(renderApp);
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
