@@ -1,46 +1,31 @@
-// App.jsx
-import React from 'react'
+const Header = ({ course }) => <h1>{course}</h1>
 
-const Header = ({ courseName }) => <h1>{courseName}</h1>
+const Part = ({ name, exercises }) => <p>{name} {exercises}</p>
 
-const Part = ({ part }) => (
-  <p>
-    {part.name} {part.exercises}
-  </p>
+const Content = ({ parts }) => (
+  <div>
+    <Part name={parts[0].name} exercises={parts[0].exercises} />
+    <Part name={parts[1].name} exercises={parts[1].exercises} />
+    <Part name={parts[2].name} exercises={parts[2].exercises} />
+  </div>
 )
 
-const Content = ({ parts }) => {
-  // For exercises 1.3/1.4 you can use direct indexing (parts[0] etc.).
-  // Here we use Part components for clarity (1.4/1.5).
-  return (
-    <div>
-      <Part part={parts[0]} />
-      <Part part={parts[1]} />
-      <Part part={parts[2]} />
-    </div>
-  )
-}
-
-const Total = ({ parts }) => {
-  const total = parts.reduce((sum, p) => sum + p.exercises, 0)
-  return <p>Number of exercises {total}</p>
-}
+const Total = ({ parts }) =>
+  <p>Number of exercises {parts[0].exercises + parts[1].exercises + parts[2].exercises}</p>
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      { name: 'Fundamentals of React', exercises: 10 },
-      { name: 'Using props to pass data', exercises: 7 },
-      { name: 'State of a component', exercises: 14 }
-    ]
-  }
+  const course = 'Half Stack application development'
+  const parts = [
+    { name: 'Fundamentals of React', exercises: 10 },
+    { name: 'Using props to pass data', exercises: 7 },
+    { name: 'State of a component', exercises: 14 }
+  ]
 
   return (
     <div>
-      <Header courseName={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <Header course={course} />
+      <Content parts={parts} />
+      <Total parts={parts} />
     </div>
   )
 }
