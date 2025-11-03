@@ -1,33 +1,38 @@
-import { useField } from './hooks'
+import { useField } from "../hooks/useField";
+import { useNavigate } from "react-router-dom";
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const navigate = useNavigate();
+  const content = useField("text");
+  const author = useField("text");
+  const info = useField("text");
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     props.addNew({
       content: content.value,
       author: author.value,
       info: info.value,
-      votes: 0
-    })
-    content.reset()
-    author.reset()
-    info.reset()
-  }
+      votes: 0,
+    });
+    props.setNotification(`A new anecdote "${content.value}" created!`);
+    setTimeout(() => props.setNotification(""), 5000);
+    navigate("/");
+    content.reset();
+    author.reset();
+    info.reset();
+  };
 
   const handleReset = () => {
-    content.reset()
-    author.reset()
-    info.reset()
-  }
+    content.reset();
+    author.reset();
+    info.reset();
+  };
 
   // Exclude 'reset' before spreading into inputs (to avoid React warning).
-  const { reset: resetContent, ...contentInput } = content
-  const { reset: resetAuthor, ...authorInput } = author
-  const { reset: resetInfo, ...infoInput } = info
+  const { reset: resetContent, ...contentInput } = content;
+  const { reset: resetAuthor, ...authorInput } = author;
+  const { reset: resetInfo, ...infoInput } = info;
 
   return (
     <div>
@@ -46,9 +51,11 @@ const CreateNew = (props) => {
           <input {...infoInput} />
         </div>
         <button type="submit">create</button>
-        <button type="button" onClick={handleReset}>reset</button>
+        <button type="button" onClick={handleReset}>
+          reset
+        </button>
       </form>
     </div>
-  )
-}
-export default CreateNew
+  );
+};
+export default CreateNew;
