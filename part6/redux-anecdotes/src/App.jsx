@@ -1,16 +1,37 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
+import { createAnecdote, voteAnecdote } from "./reducers/anecdoteReducer";
+import { setNotification, clearNotification } from "./reducers/notificationReducer";
+import Notification from "./components/Notification";
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector((state) => state.anecdotes);
+  const dispatch = useDispatch();
 
-  const vote = id => {
-    console.log('vote', id)
-  }
+  const vote = (id) => {
+    const anecdote = anecdotes.find((a) => a.id === id);
+    dispatch(voteAnecdote(id));
+    dispatch(setNotification(`you voted '${anecdote.content}'`));
+    setTimeout(() => {
+      dispatch(clearNotification());
+    }, 5000);
+  };
+
+  const addAnecdote = (event) => {
+    event.preventDefault();
+    const content = event.target.anecdote.value;
+    event.target.anecdote.value = "";
+    dispatch(createAnecdote(content));
+    dispatch(setNotification(`you created '${content}'`));
+    setTimeout(() => {
+      dispatch(clearNotification());
+    }, 5000);
+  };
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote => (
+      <Notification />
+      {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
@@ -20,14 +41,14 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
+      <form onSubmit={addAnecdote}>
         <div>
-          <input />
+          <input name="anecdote" />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
